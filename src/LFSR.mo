@@ -2,6 +2,8 @@ import Array "mo:base/Array";
 import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 import Nat8 "mo:base/Nat8";
+import Nat16 "mo:base/Nat16";
+import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Time "mo:base/Time";
 
@@ -12,10 +14,9 @@ module {
         next() : (T, Bool);
     };
 
-    // An 8 bit linear feedback shift register.
+    // An 8-bit linear feedback shift register.
     public class LFSR8(
-        // Seed.
-        s : ?Nat8,
+        s : ?Nat8, // Seed.
     ) {
         private let seed : Nat8 = switch (s) {
             case (null) { nat8(Int.abs(Time.now())); };
@@ -28,8 +29,53 @@ module {
             Bool, // Whether the sequence was completed and is restarting.
         ) {
             let s = state;
-            let b = (s >> 0) ^ (s >> 2) ^ (s >> 3) ^ (s >> 4);
+            // X^8 + X^6 + X^5 + X^4 + 1
+            let b = (s >> 0) ^ (s >> 2) ^ (s >> 3) ^ (s >> 4) & 1;
             state := (s >> 1) | (b << 7);
+            (state, state == seed);
+        };
+    };
+
+    // An 16-bit linear feedback shift register.
+    public class LFSR16(
+        s : ?Nat16, // Seed.
+    ) {
+        private let seed : Nat16 = switch (s) {
+            case (null) { nat16(Int.abs(Time.now())); };
+            case (? s)  { s;                          };
+        };
+        private var state = seed;
+
+        public func next() : (
+            Nat16, // Next pseudo random number.
+            Bool,  // Whether the sequence was completed and is restarting.
+        ) {
+            let s = state;
+            // X^16 + X^14 + X^13 + X^11 + 1
+            let b = (s >> 0) ^ (s >> 2) ^ (s >> 3) ^ (s >> 5) & 1;
+            state := (s >> 1) | (b << 15);
+            (state, state == seed);
+        };
+    };
+
+    // An 32-bit linear feedback shift register.
+    public class LFSR32(
+        s : ?Nat32, // Seed.
+    ) {
+        private let seed : Nat32 = switch (s) {
+            case (null) { nat32(Int.abs(Time.now())); };
+            case (? s)  { s;                          };
+        };
+        private var state = seed;
+
+        public func next() : (
+            Nat32, // Next pseudo random number.
+            Bool,  // Whether the sequence was completed and is restarting.
+        ) {
+            let s = state;
+            // X^32+ X^22 + X^2 + X^1 + 1
+            let b = (s >> 0) ^ (s >> 10) ^ (s >> 30) ^ (s >> 31) & 1;
+            state := (s >> 1) | (b << 31);
             (state, state == seed);
         };
     };
@@ -62,5 +108,13 @@ module {
 
     private func nat8(n : Nat) : Nat8 {
         Nat8.fromNat(Nat64.toNat(Nat64.fromNat(n) & 0xFF));
+    };
+
+    private func nat16(n : Nat) : Nat16 {
+        Nat16.fromNat(Nat64.toNat(Nat64.fromNat(n) & 0xFFFF));
+    };
+
+    private func nat32(n : Nat) : Nat32 {
+        Nat32.fromNat(Nat64.toNat(Nat64.fromNat(n) & 0xFFFFFFFF));
     };
 };
