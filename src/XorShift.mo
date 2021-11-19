@@ -25,7 +25,7 @@ module {
             state ^= (state >> 12);
             state ^= (state << 25);
             state ^= (state >> 27);
-            state * 2685821657736338717;
+            state *% 2685821657736338717;
         };
     };
 
