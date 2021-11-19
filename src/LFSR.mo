@@ -1,13 +1,12 @@
 import Array "mo:base/Array";
 import Int "mo:base/Int";
+import IO "mo:io/IO";
 import Iter "mo:base/Iter";
 import Nat8 "mo:base/Nat8";
 import Nat16 "mo:base/Nat16";
 import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Time "mo:base/Time";
-
-import IO "mo:io/IO";
 
 module {
     public type LFSR<T> = {
@@ -17,7 +16,7 @@ module {
     // An 8-bit linear feedback shift register.
     public class LFSR8(
         s : ?Nat8, // Seed.
-    ) {
+    ) : LFSR<Nat8> {
         private let seed : Nat8 = switch (s) {
             case (null) { nat8(Int.abs(Time.now())); };
             case (? s)  { s;                         };
@@ -39,7 +38,7 @@ module {
     // An 16-bit linear feedback shift register.
     public class LFSR16(
         s : ?Nat16, // Seed.
-    ) {
+    ) : LFSR<Nat16> {
         private let seed : Nat16 = switch (s) {
             case (null) { nat16(Int.abs(Time.now())); };
             case (? s)  { s;                          };
@@ -61,7 +60,7 @@ module {
     // An 32-bit linear feedback shift register.
     public class LFSR32(
         s : ?Nat32, // Seed.
-    ) {
+    ) : LFSR<Nat32> {
         private let seed : Nat32 = switch (s) {
             case (null) { nat32(Int.abs(Time.now())); };
             case (? s)  { s;                          };

@@ -34,3 +34,6 @@ let (v, _) = feed.next();
 // Iter
 let iter = LFSR.toIter(feed);
 ```
+## XorShift
+
+Reference: [prng](https://vigna.di.unimi.it/ftp/papers/xorshift.pdf).
