@@ -4,7 +4,7 @@ let Package = { name : Text, version : Text, repo : Text, dependencies : List Te
 let additions = [
   { name = "io"
   , repo = "https://github.com/aviate-labs/io.mo"
-  , version = "v0.2.0"
+  , version = "v0.3.0"
   , dependencies = ["base"]
   }
 ] : List Package

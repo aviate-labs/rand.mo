@@ -7,8 +7,6 @@ import TrieSet "mo:base/TrieSet";
 
 import IO "mo:io/IO";
 
-import D "mo:base/Debug";
-
 import LFSR "../src/LFSR";
 
 do {
@@ -29,6 +27,8 @@ do {
     if (i != 0xFF) assert(false);
 
     assert(Iter.size(LFSR.toIter(feed)) == 0xFF);
-    let (bs, _) = IO.readAll(LFSR.toReader(feed));
-    assert(bs.size() == 0xFF);
+    switch (IO.readAll(LFSR.toReader(feed))) {
+        case (#ok(bs)) assert(bs.size() == 0xFF);
+        case (_)       assert(false);
+    };
 };

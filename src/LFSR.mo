@@ -94,15 +94,15 @@ module {
     public func toReader<T>(feed : LFSR<T>) : IO.Reader<T> = object {
         let lfsr = feed;
         var restarted = false;
-        public func read(n : Nat) : ([T], IO.Error) {
+        public func read(n : Nat) : IO.Result<[T]> {
             var ts : [T] = [];
             for (i in Iter.range(0, n-1)) {
-                if (restarted) return (ts, IO.EOF);
+                if (restarted) return #eof(ts);
                 let (v, r) = lfsr.next();
                 restarted := r;
                 ts := Array.append<T>(ts, [v]);
             };
-            (ts, "");
+            #ok(ts);
         };
     };
 
