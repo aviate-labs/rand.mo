@@ -1,4 +1,3 @@
-import Array "mo:base/Array";
 import Binary "mo:encoding/Binary";
 import Buffer "mo:base/Buffer";
 import Int "mo:base/Int";
@@ -40,7 +39,7 @@ module {
         let xors = gen;
         let bs = Buffer.Buffer<Nat8>(8);
         public func read(n : Nat) : IO.Result<[Nat8]> {
-            var ts : [Nat8] = [];
+            let ts = Buffer.Buffer<Nat8>(n);
             for (_ in Iter.range(0, n-1)) {
                 if (bs.size() == 0) {
                     for (b in Binary.BigEndian.fromNat64(gen.next()).vals()) {
@@ -49,12 +48,12 @@ module {
                 };
                 switch (bs.removeLast()) {
                     case (? v) {
-                        ts := Array.append<Nat8>(ts, [v]);
+                        ts.add(v);
                     };
-                    case (null) return #eof(ts);
+                    case (null) return #eof(ts.toArray());
                 };
             };
-            #ok(ts);
+            #ok(ts.toArray());
         };
     };
 };

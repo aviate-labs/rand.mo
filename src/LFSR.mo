@@ -1,4 +1,4 @@
-import Array "mo:base/Array";
+import Buffer "mo:base/Buffer";
 import Int "mo:base/Int";
 import IO "mo:io/IO";
 import Iter "mo:base/Iter";
@@ -94,14 +94,14 @@ module {
         let lfsr = feed;
         var restarted = false;
         public func read(n : Nat) : IO.Result<[T]> {
-            var ts : [T] = [];
+            let ts = Buffer.Buffer<T>(n);
             for (i in Iter.range(0, n-1)) {
-                if (restarted) return #eof(ts);
+                if (restarted) return #eof(ts.toArray());
                 let (v, r) = lfsr.next();
                 restarted := r;
-                ts := Array.append<T>(ts, [v]);
+                ts.add(v);
             };
-            #ok(ts);
+            #ok(ts.toArray());
         };
     };
 
