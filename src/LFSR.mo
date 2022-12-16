@@ -1,12 +1,12 @@
-import Buffer "mo:base/Buffer";
-import Int "mo:base/Int";
+import Buffer "mo:base-0.7.3/Buffer";
+import Int "mo:base-0.7.3/Int";
 import IO "mo:io/IO";
-import Iter "mo:base/Iter";
-import Nat8 "mo:base/Nat8";
-import Nat16 "mo:base/Nat16";
-import Nat32 "mo:base/Nat32";
-import Nat64 "mo:base/Nat64";
-import Time "mo:base/Time";
+import Iter "mo:base-0.7.3/Iter";
+import Nat8 "mo:base-0.7.3/Nat8";
+import Nat16 "mo:base-0.7.3/Nat16";
+import Nat32 "mo:base-0.7.3/Nat32";
+import Nat64 "mo:base-0.7.3/Nat64";
+import Time "mo:base-0.7.3/Time";
 
 module {
     public type LFSR<T> = {
@@ -96,12 +96,12 @@ module {
         public func read(n : Nat) : IO.Result<[T]> {
             let ts = Buffer.Buffer<T>(n);
             for (i in Iter.range(0, n-1)) {
-                if (restarted) return #eof(ts.toArray());
+                if (restarted) return #eof(Buffer.toArray(ts));
                 let (v, r) = lfsr.next();
                 restarted := r;
                 ts.add(v);
             };
-            #ok(ts.toArray());
+            #ok(Buffer.toArray(ts));
         };
     };
 

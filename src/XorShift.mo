@@ -1,10 +1,10 @@
 import Binary "mo:encoding/Binary";
-import Buffer "mo:base/Buffer";
-import Int "mo:base/Int";
+import Buffer "mo:base-0.7.3/Buffer";
+import Int "mo:base-0.7.3/Int";
 import IO "mo:io/IO";
-import Iter "mo:base/Iter";
-import Nat64 "mo:base/Nat64";
-import Time "mo:base/Time";
+import Iter "mo:base-0.7.3/Iter";
+import Nat64 "mo:base-0.7.3/Nat64";
+import Time "mo:base-0.7.3/Time";
 
 module {
     public type XorShift = {
@@ -50,10 +50,10 @@ module {
                     case (? v) {
                         ts.add(v);
                     };
-                    case (null) return #eof(ts.toArray());
+                    case (null) return #eof(Buffer.toArray(ts));
                 };
             };
-            #ok(ts.toArray());
+            #ok(Buffer.toArray(ts));
         };
     };
 };
